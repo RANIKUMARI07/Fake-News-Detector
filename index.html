@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeritasAI — AI-Powered Fake News Detection Platform</title>
+  <meta name="description" content="Detect fake and misleading news with 92%+ accuracy using advanced NLP, multi-signal credibility scoring, and explainable AI. Real-time API, browser extension, and analytics dashboard.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🛡️</text></svg>">
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#g1)" stroke-width="2.5"/><path d="M10 16l4 4 8-8" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#4f8fff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+      <span>VeritasAI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#personas">Users</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#risks">Risks</a></li>
+    </ul>
+    <a href="#features" class="nav-cta">Explore Platform</a>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> AI-Powered News Verification</div>
+    <h1>Fight Misinformation with <span class="gradient">Explainable AI</span></h1>
+    <p>VeritasAI combines multi-signal credibility scoring, NLP classification, and real-time fact-checking to empower journalists, platforms, and readers — making truth more accessible than misinformation.</p>
+    <div class="hero-actions">
+      <a href="#features" class="btn-primary">View Platform Features</a>
+      <a href="#architecture" class="btn-secondary">Technical Architecture →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <h3><span data-count="92" data-suffix="%+">0</span></h3>
+        <p>F1 Accuracy</p>
+      </div>
+      <div class="hero-stat">
+        <h3><span data-count="10" data-suffix="+">0</span></h3>
+        <p>Languages</p>
+      </div>
+      <div class="hero-stat">
+        <h3><span data-count="5" data-suffix="M+">0</span></h3>
+        <p>Articles / Day</p>
+      </div>
+      <div class="hero-stat">
+        <h3>&lt;<span data-count="2" data-suffix="s">0</span></h3>
+        <p>Avg Latency</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROBLEM ===== -->
+<section id="problem">
+  <div class="section-header reveal">
+    <span class="section-label">The Challenge</span>
+    <h2>The Misinformation Crisis</h2>
+    <p>Digital media has made it trivially easy to publish and amplify false information at unprecedented scale.</p>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(239,68,68,0.1)">⚡</div>
+      <h3>Velocity</h3>
+      <p>Fake news spreads up to 6× faster than real news on social platforms. Speed of propagation outpaces human fact-checkers.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(79,143,255,0.1)">📊</div>
+      <h3>Volume</h3>
+      <p>Millions of articles published daily make manual fact-checking impossible at scale — coverage remains below 1%.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(139,92,246,0.1)">🤖</div>
+      <h3>Sophistication</h3>
+      <p>AI-generated text, deepfakes, and coordinated inauthentic behavior make detection increasingly complex.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(245,158,11,0.1)">🧠</div>
+      <h3>Confirmation Bias</h3>
+      <p>Engagement-optimized algorithms amplify emotionally charged content regardless of factual accuracy.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(6,214,160,0.1)">🌍</div>
+      <h3>Linguistic Diversity</h3>
+      <p>Fake news transcends languages, dialects, and cultural contexts — requiring multilingual AI solutions.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(236,72,153,0.1)">🔍</div>
+      <h3>Current Tools Fail</h3>
+      <p>Keyword blacklists, source blocklists, and single-model classifiers suffer from high false positives and no explainability.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section id="features" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">Platform Capabilities</span>
+    <h2>Core Features</h2>
+    <p>A comprehensive detection engine combining NLP, multi-signal analysis, and explainable AI.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <span class="feature-number">01</span>
+      <span class="feature-tag tag-ai">AI / ML</span>
+      <h3>NLP Classification Pipeline</h3>
+      <p>Multi-label classification — Fake, Misleading, Satire, Real — via fine-tuned RoBERTa, XGBoost ensemble, and meta-learner with calibrated probability scores.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">02</span>
+      <span class="feature-tag tag-ai">AI / ML</span>
+      <h3>Credibility Scoring Engine</h3>
+      <p>Composite 0–100 score from 6 weighted signals: source reputation (25%), linguistic cues (20%), claim verification (30%), citation quality (10%), temporal consistency (8%), author credibility (7%).</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">03</span>
+      <span class="feature-tag tag-ai">Explainability</span>
+      <h3>XAI Module</h3>
+      <p>Every prediction includes human-readable explanations with LIME & SHAP values. Highlighted text spans show exactly which phrases influenced the classification.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">04</span>
+      <span class="feature-tag tag-api">API</span>
+      <h3>RESTful & WebSocket API</h3>
+      <p>Versioned REST API for article analysis, batch processing (500/request), source reputation lookup, and real-time WebSocket integration. P99 latency &lt; 3s.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">05</span>
+      <span class="feature-tag tag-ui">Dashboard</span>
+      <h3>Web Dashboard</h3>
+      <p>Visual credibility gauges, analysis history, source reputation explorer, team workspaces for collaborative fact-checking, and analytics on model confidence trends.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">06</span>
+      <span class="feature-tag tag-ui">Extension</span>
+      <h3>Browser Extension</h3>
+      <p>Auto-scans articles on major news domains. Color-coded credibility banner with expandable explanation panel and one-click reporting for unscanned articles.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">07</span>
+      <span class="feature-tag tag-ml">ML Ops</span>
+      <h3>Active Learning Pipeline</h3>
+      <p>Human feedback routed to review queues. Weekly fine-tuning cycles. Continuous drift detection with Evidently AI and automated performance monitoring.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">08</span>
+      <span class="feature-tag tag-ai">AI / ML</span>
+      <h3>Multilingual Support</h3>
+      <p>XLM-RoBERTa model handles 10+ languages at launch. Separate benchmarks per language ensure consistent quality across geographies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CREDIBILITY SIGNALS ===== -->
+<section id="signals">
+  <div class="section-header reveal">
+    <span class="section-label">Scoring Engine</span>
+    <h2>Credibility Signal Weights</h2>
+    <p>Six weighted dimensions compose the final credibility score (0–100).</p>
+  </div>
+  <div class="signals-container reveal">
+    <div class="signal-bar">
+      <span class="signal-name">Claim Verification</span>
+      <div class="signal-track"><div class="signal-fill" data-width="100%" style="background:linear-gradient(90deg,#4f8fff,#8b5cf6)"></div></div>
+      <span class="signal-weight">30%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Source Reputation</span>
+      <div class="signal-track"><div class="signal-fill" data-width="83%" style="background:linear-gradient(90deg,#8b5cf6,#ec4899)"></div></div>
+      <span class="signal-weight">25%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Linguistic Cues</span>
+      <div class="signal-track"><div class="signal-fill" data-width="67%" style="background:linear-gradient(90deg,#06d6a0,#4f8fff)"></div></div>
+      <span class="signal-weight">20%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Citation Quality</span>
+      <div class="signal-track"><div class="signal-fill" data-width="33%" style="background:linear-gradient(90deg,#f59e0b,#ef4444)"></div></div>
+      <span class="signal-weight">10%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Temporal Consistency</span>
+      <div class="signal-track"><div class="signal-fill" data-width="27%" style="background:linear-gradient(90deg,#ec4899,#8b5cf6)"></div></div>
+      <span class="signal-weight">8%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Author Credibility</span>
+      <div class="signal-track"><div class="signal-fill" data-width="23%" style="background:linear-gradient(90deg,#4f8fff,#06d6a0)"></div></div>
+      <span class="signal-weight">7%</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== API ===== -->
+<section id="api" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">Developer Interface</span>
+    <h2>API Endpoints</h2>
+    <p>A versioned REST API for real-time and batch article analysis.</p>
+  </div>
+  <div class="api-table-wrap reveal">
+    <table class="api-table">
+      <thead>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="api-method method-post">POST</span></td>
+          <td class="api-endpoint">/v1/analyze</td>
+          <td>Submit article text or URL for analysis</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-get">GET</span></td>
+          <td class="api-endpoint">/v1/result/{id}</td>
+          <td>Retrieve async analysis result</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-post">POST</span></td>
+          <td class="api-endpoint">/v1/feedback</td>
+          <td>Submit correction or feedback on prediction</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-get">GET</span></td>
+          <td class="api-endpoint">/v1/source/{domain}</td>
+          <td>Get reputation profile for a domain</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-post">POST</span></td>
+          <td class="api-endpoint">/v1/batch</td>
+          <td>Bulk submit up to 500 articles</td>
+          <td>API Key + Tier</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-get">GET</span></td>
+          <td class="api-endpoint">/v1/languages</td>
+          <td>List supported languages</td>
+          <td>Public</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== PERSONAS ===== -->
+<section id="personas">
+  <div class="section-header reveal">
+    <span class="section-label">Target Audience</span>
+    <h2>Who We Serve</h2>
+    <p>Designed for journalists, platform teams, researchers, and everyday readers.</p>
+  </div>
+  <div class="personas-grid">
+    <div class="persona-card reveal">
+      <div class="persona-avatar">📰</div>
+      <h3>Priya</h3>
+      <p class="persona-role">Investigative Journalist</p>
+      <p>Needs rapid credibility checks on sources before publication. Uses the platform 20+ times daily. Values accuracy and source attribution.</p>
+    </div>
+    <div class="persona-card reveal">
+      <div class="persona-avatar">🛡️</div>
+      <h3>Marcus</h3>
+      <p class="persona-role">Trust & Safety Lead</p>
+      <p>Integrates detection at platform scale to triage flagged content. Values API reliability, throughput, and comprehensive audit logs.</p>
+    </div>
+    <div class="persona-card reveal">
+      <div class="persona-avatar">📱</div>
+      <h3>Aisha</h3>
+      <p class="persona-role">Casual News Reader</p>
+      <p>Wants a browser extension that quietly flags dubious articles while browsing. Values simplicity and non-intrusive UX.</p>
+    </div>
+    <div class="persona-card reveal">
+      <div class="persona-avatar">🔬</div>
+      <h3>Dr. Raj</h3>
+      <p class="persona-role">Academic Researcher</p>
+      <p>Studies disinformation patterns. Needs bulk analysis tools, dataset export, and detailed model metadata for research.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ARCHITECTURE ===== -->
+<section id="architecture" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">System Design</span>
+    <h2>Technical Architecture</h2>
+    <p>A modular, horizontally scalable stack built for 5M+ articles per day.</p>
+  </div>
+  <div class="arch-grid">
+    <div class="arch-layer reveal">
+      <h4>Ingestion</h4>
+      <ul>
+        <li>URL Scraper</li>
+        <li>Text Extractor</li>
+        <li>Language Detector</li>
+        <li>Kafka Queue</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>NLP Preprocessing</h4>
+      <ul>
+        <li>spaCy / NLTK Pipeline</li>
+        <li>Named Entity Recognition</li>
+        <li>Coreference Resolution</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>ML Models</h4>
+      <ul>
+        <li>Fine-tuned RoBERTa</li>
+        <li>XGBoost Ensemble</li>
+        <li>Meta-Learner</li>
+        <li>XAI Module (LIME/SHAP)</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>Credibility Engine</h4>
+      <ul>
+        <li>Source Reputation DB (Neo4j)</li>
+        <li>Claim Extractor</li>
+        <li>Fact-Check API Clients</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>API Gateway</h4>
+      <ul>
+        <li>FastAPI + Nginx</li>
+        <li>Auth Service</li>
+        <li>Rate Limiter</li>
+        <li>WebSocket Handler</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>Data Storage</h4>
+      <ul>
+        <li>PostgreSQL (results)</li>
+        <li>Redis (cache)</li>
+        <li>S3 (model artifacts)</li>
+        <li>Elasticsearch (search)</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>MLOps</h4>
+      <ul>
+        <li>MLflow (tracking)</li>
+        <li>DVC (data versioning)</li>
+        <li>Airflow (pipelines)</li>
+        <li>Prometheus + Grafana</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>Frontend</h4>
+      <ul>
+        <li>React + TypeScript SPA</li>
+        <li>Browser Extension (MV3)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== METRICS ===== -->
+<section id="metrics">
+  <div class="section-header reveal">
+    <span class="section-label">Success Criteria</span>
+    <h2>Key Performance Targets</h2>
+    <p>Measurable objectives driving development across all phases.</p>
+  </div>
+  <div class="metrics-grid">
+    <div class="metric-card reveal">
+      <div class="metric-value">≥ 92%</div>
+      <div class="metric-label">F1 Score (All Languages)</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">100%</div>
+      <div class="metric-label">Predictions with Explanation</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">&lt; 2s</div>
+      <div class="metric-label">Avg API Response Time</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">99.9%</div>
+      <div class="metric-label">System Uptime SLA</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">5M+</div>
+      <div class="metric-label">Articles / Day Capacity</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">&lt; 5%</div>
+      <div class="metric-label">Bias Disparity Threshold</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">500K+</div>
+      <div class="metric-label">Labeled Training Articles</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">50K+</div>
+      <div class="metric-label">Domains in Reputation DB</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROADMAP ===== -->
+<section id="roadmap" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">Delivery Plan</span>
+    <h2>Product Roadmap</h2>
+    <p>Six phases from dataset curation to GA launch and beyond.</p>
+  </div>
+  <div class="roadmap-container reveal">
+    <div class="roadmap-line"></div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 0 — Months 1–2</span>
+        <h4>Foundation</h4>
+        <p>Dataset curation, baseline model training, architecture design, API spec finalization.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 1 — Months 3–5</span>
+        <h4>Core Engine (Alpha)</h4>
+        <p>NLP pipeline, RoBERTa fine-tuning, credibility engine v1, REST API alpha. Gate: F1 ≥ 85%, P99 &lt; 3s.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 2 — Months 6–8</span>
+        <h4>Platform Build (Beta)</h4>
+        <p>Web dashboard, browser extension, multilingual support (5 languages), closed beta launch.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 3 — Months 9–10</span>
+        <h4>Hardening</h4>
+        <p>XAI module, active learning pipeline, bias audit, security pen-test, open beta. Gate: F1 ≥ 90%, NPS ≥ 45.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 4 — Month 11</span>
+        <h4>General Availability</h4>
+        <p>10 languages, full API, dashboard, extension, SLA guarantees. Gate: F1 ≥ 92%, uptime ≥ 99.9%.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 5 (v2.0) — Month 12+</span>
+        <h4>Next Generation</h4>
+        <p>Image/video deepfake detection, social graph analysis, native mobile apps (iOS & Android).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RISKS ===== -->
+<section id="risks">
+  <div class="section-header reveal">
+    <span class="section-label">Risk Management</span>
+    <h2>Risks & Mitigations</h2>
+    <p>Proactively identified risks with concrete mitigation strategies.</p>
+  </div>
+  <div class="risks-table-wrap reveal">
+    <table class="risks-table">
+      <thead>
+        <tr><th>Risk</th><th>Severity</th><th>Mitigation Strategy</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Adversarial attacks on classifier</td>
+          <td><span class="severity severity-high">High</span></td>
+          <td>Adversarial training, input sanitization, rate-limiting anomalous queries</td>
+        </tr>
+        <tr>
+          <td>Political bias in model outputs</td>
+          <td><span class="severity severity-high">High</span></td>
+          <td>Quarterly bias audits, diverse annotation team, blind political-label testing</td>
+        </tr>
+        <tr>
+          <td>Legal liability for misclassification</td>
+          <td><span class="severity severity-high">High</span></td>
+          <td>Label outputs as AI-assisted with disclaimers; not deterministic</td>
+        </tr>
+        <tr>
+          <td>Data quality / label noise</td>
+          <td><span class="severity severity-medium">Medium</span></td>
+          <td>Multi-annotator agreement (Fleiss κ &gt; 0.7), active learning curation</td>
+        </tr>
+        <tr>
+          <td>Third-party API dependency failure</td>
+          <td><span class="severity severity-medium">Medium</span></td>
+          <td>Fallback scoring when external APIs unavailable; aggressive caching</td>
+        </tr>
+        <tr>
+          <td>Model drift over time</td>
+          <td><span class="severity severity-medium">Medium</span></td>
+          <td>Automated drift detection via Evidently AI; monthly re-evaluation triggers</td>
+        </tr>
+        <tr>
+          <td>Regulatory restrictions</td>
+          <td><span class="severity severity-low">Low</span></td>
+          <td>Legal review per jurisdiction; data residency options for EU customers</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" width="28" height="28"><circle cx="16" cy="16" r="14" stroke="url(#g2)" stroke-width="2.5"/><path d="M10 16l4 4 8-8" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#4f8fff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+        <span>VeritasAI</span>
+      </a>
+      <p>AI-powered fake news detection platform. Making truth more accessible than misinformation.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#api">API Reference</a>
+      <a href="#signals">Credibility Engine</a>
+      <a href="#architecture">Architecture</a>
+    </div>
+    <div class="footer-links">
+      <h4>Company</h4>
+      <a href="#personas">Target Users</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#risks">Risk Management</a>
+      <a href="#metrics">Success Metrics</a>
+    </div>
+    <div class="footer-links">
+      <h4>Compliance</h4>
+      <a href="#">GDPR Compliant</a>
+      <a href="#">CCPA Compliant</a>
+      <a href="#">SOC 2 Type II</a>
+      <a href="#">Security Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 VeritasAI — Product Requirements Document v1.0 | This is a living document.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
