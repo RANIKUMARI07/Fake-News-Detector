@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeritasAI — AI-Powered Fake News Detection Platform</title>
+  <meta name="description" content="Detect fake and misleading news with 92%+ accuracy using advanced NLP, multi-signal credibility scoring, and explainable AI. Real-time API, browser extension, and analytics dashboard.">
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: rgba(255,255,255,0.03);
+  --bg-card-hover: rgba(255,255,255,0.06);
+  --text-primary: #e8e8f0;
+  --text-secondary: #8888a0;
+  --text-muted: #555570;
+  --accent-blue: #4f8fff;
+  --accent-purple: #8b5cf6;
+  --accent-cyan: #06d6a0;
+  --accent-red: #ef4444;
+  --accent-orange: #f59e0b;
+  --accent-pink: #ec4899;
+  --gradient-hero: linear-gradient(135deg, #4f8fff 0%, #8b5cf6 50%, #ec4899 100%);
+  --gradient-card: linear-gradient(135deg, rgba(79,143,255,0.1), rgba(139,92,246,0.05));
+  --border-color: rgba(255,255,255,0.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-glow: 0 0 60px rgba(79,143,255,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 3px; }
+
+/* ===== NAVIGATION ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 1rem 2rem;
+  backdrop-filter: blur(20px);
+  background: rgba(10,10,15,0.8);
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+.navbar.scrolled { padding: 0.6rem 2rem; box-shadow: var(--shadow-glow); }
+.nav-container { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo svg { width: 32px; height: 32px; }
+.nav-logo span { font-size: 1.25rem; font-weight: 700; background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.3s; position: relative; }
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--gradient-hero); transition: width 0.3s; border-radius: 1px; }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta { padding: 0.5rem 1.25rem; border-radius: 8px; background: var(--gradient-hero); color: #fff; text-decoration: none; font-size: 0.875rem; font-weight: 600; transition: transform 0.2s, box-shadow 0.3s; border: none; cursor: pointer; }
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(79,143,255,0.4); }
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+.hamburger span { width: 24px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: 0.3s; }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 8rem 2rem 4rem; position: relative; overflow: hidden;
+}
+.hero-bg { position: absolute; inset: 0; }
+.hero-bg .orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3;
+  animation: float 8s ease-in-out infinite;
+}
+.hero-bg .orb-1 { width: 500px; height: 500px; background: var(--accent-blue); top: -10%; left: -10%; }
+.hero-bg .orb-2 { width: 400px; height: 400px; background: var(--accent-purple); bottom: -10%; right: -5%; animation-delay: -3s; }
+.hero-bg .orb-3 { width: 300px; height: 300px; background: var(--accent-pink); top: 40%; left: 50%; animation-delay: -5s; }
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+.hero-content { position: relative; z-index: 1; text-align: center; max-width: 860px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 500;
+  background: rgba(79,143,255,0.1); border: 1px solid rgba(79,143,255,0.2);
+  color: var(--accent-blue); margin-bottom: 1.5rem;
+  animation: fadeInUp 0.6s ease;
+}
+.hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-cyan); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1;
+  margin-bottom: 1.5rem; letter-spacing: -0.03em;
+  animation: fadeInUp 0.8s ease;
+}
+.hero h1 .gradient { background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 1.15rem; color: var(--text-secondary); max-width: 620px; margin: 0 auto 2.5rem; animation: fadeInUp 1s ease; }
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeInUp 1.2s ease; }
+.btn-primary {
+  padding: 0.85rem 2rem; border-radius: 12px; background: var(--gradient-hero);
+  color: #fff; font-weight: 600; font-size: 1rem; border: none; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s; text-decoration: none;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,143,255,0.35); }
+.btn-secondary {
+  padding: 0.85rem 2rem; border-radius: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
+  color: var(--text-primary); font-weight: 600; font-size: 1rem; cursor: pointer;
+  transition: all 0.3s; text-decoration: none;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+.hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 4rem; animation: fadeInUp 1.4s ease; }
+.hero-stat h3 { font-size: 2rem; font-weight: 800; background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-stat p { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== SECTIONS ===== */
+section { padding: 6rem 2rem; }
+.section-header { text-align: center; margin-bottom: 4rem; }
+.section-label {
+  display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--accent-blue); margin-bottom: 0.75rem;
+  padding: 4px 12px; border-radius: 4px; background: rgba(79,143,255,0.08);
+}
+.section-header h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
+.section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.05rem; }
+
+/* ===== PROBLEM ===== */
+.problem-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.problem-card {
+  background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius);
+  padding: 2rem; transition: all 0.4s ease; position: relative; overflow: hidden;
+}
+.problem-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gradient-hero); opacity: 0; transition: opacity 0.4s;
+}
+.problem-card:hover { background: var(--bg-card-hover); transform: translateY(-4px); border-color: rgba(79,143,255,0.15); }
+.problem-card:hover::before { opacity: 1; }
+.problem-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; font-size: 1.5rem; }
+.problem-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.problem-card p { font-size: 0.9rem; color: var(--text-secondary); }
+
+/* ===== FEATURES ===== */
+.features-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+.feature-card {
+  background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius);
+  padding: 2rem; transition: all 0.4s; position: relative; overflow: hidden;
+}
+.feature-card:hover { background: var(--bg-card-hover); transform: translateY(-4px); }
+.feature-number { font-size: 3rem; font-weight: 900; background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.15; position: absolute; top: 1rem; right: 1.5rem; }
+.feature-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+.feature-card p { font-size: 0.9rem; color: var(--text-secondary); }
+.feature-tag { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 4px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.tag-ai { background: rgba(79,143,255,0.12); color: var(--accent-blue); }
+.tag-api { background: rgba(6,214,160,0.12); color: var(--accent-cyan); }
+.tag-ui { background: rgba(139,92,246,0.12); color: var(--accent-purple); }
+.tag-ml { background: rgba(236,72,153,0.12); color: var(--accent-pink); }
+
+/* ===== CREDIBILITY SIGNALS ===== */
+.signals-container { max-width: 900px; margin: 0 auto; }
+.signal-bar {
+  display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem;
+  background: var(--bg-card); border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm); margin-bottom: 0.75rem;
+  transition: all 0.3s;
+}
+.signal-bar:hover { background: var(--bg-card-hover); transform: translateX(4px); }
+.signal-name { width: 180px; font-weight: 600; font-size: 0.9rem; flex-shrink: 0; }
+.signal-track { flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+.signal-fill { height: 100%; border-radius: 4px; transition: width 1.5s ease; }
+.signal-weight { width: 50px; text-align: right; font-weight: 700; font-size: 0.9rem; font-family: 'JetBrains Mono', monospace; }
+
+/* ===== ARCHITECTURE ===== */
+.arch-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.arch-layer {
+  background: var(--bg-card); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 1.5rem; transition: all 0.3s;
+}
+.arch-layer:hover { background: var(--bg-card-hover); transform: scale(1.02); }
+.arch-layer h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; color: var(--accent-blue); }
+.arch-layer ul { list-style: none; }
+.arch-layer li { font-size: 0.82rem; color: var(--text-secondary); padding: 4px 0; padding-left: 14px; position: relative; }
+.arch-layer li::before { content: '›'; position: absolute; left: 0; color: var(--accent-purple); font-weight: 700; }
+
+/* ===== PERSONAS ===== */
+.personas-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.persona-card {
+  background: var(--bg-card); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 2rem; text-align: center; transition: all 0.4s;
+}
+.persona-card:hover { background: var(--bg-card-hover); transform: translateY(-6px); }
+.persona-avatar { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; background: var(--gradient-card); border: 2px solid var(--border-color); }
+.persona-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; }
+.persona-role { font-size: 0.8rem; color: var(--accent-blue); font-weight: 500; margin-bottom: 0.75rem; }
+.persona-card p { font-size: 0.85rem; color: var(--text-secondary); }
+
+/* ===== ROADMAP ===== */
+.roadmap-container { max-width: 800px; margin: 0 auto; position: relative; }
+.roadmap-line { position: absolute; left: 24px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple), var(--accent-pink)); }
+.roadmap-item { display: flex; gap: 2rem; margin-bottom: 2rem; position: relative; }
+.roadmap-dot {
+  width: 12px; height: 12px; border-radius: 50%; background: var(--accent-blue);
+  border: 3px solid var(--bg-primary); flex-shrink: 0; margin-top: 6px; z-index: 1;
+  position: relative; left: 19px;
+}
+.roadmap-item:nth-child(2) .roadmap-dot { background: var(--accent-purple); }
+.roadmap-item:nth-child(3) .roadmap-dot { background: var(--accent-cyan); }
+.roadmap-item:nth-child(4) .roadmap-dot { background: var(--accent-orange); }
+.roadmap-item:nth-child(5) .roadmap-dot { background: var(--accent-pink); }
+.roadmap-item:nth-child(6) .roadmap-dot { background: var(--accent-red); }
+.roadmap-content {
+  background: var(--bg-card); border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm); padding: 1.5rem; flex: 1; transition: all 0.3s;
+  margin-left: 20px;
+}
+.roadmap-content:hover { background: var(--bg-card-hover); }
+.roadmap-phase { font-size: 0.75rem; font-weight: 600; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.08em; }
+.roadmap-content h4 { font-size: 1rem; font-weight: 700; margin: 0.25rem 0 0.5rem; }
+.roadmap-content p { font-size: 0.85rem; color: var(--text-secondary); }
+
+/* ===== RISKS TABLE ===== */
+.risks-table-wrap { max-width: 1000px; margin: 0 auto; overflow-x: auto; }
+.risks-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.risks-table th {
+  text-align: left; padding: 1rem 1.25rem; background: rgba(79,143,255,0.08);
+  font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--accent-blue); border-bottom: 1px solid var(--border-color);
+}
+.risks-table td { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
+.risks-table tr:hover td { background: var(--bg-card-hover); }
+.severity { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+.severity-high { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+.severity-medium { background: rgba(245,158,11,0.15); color: var(--accent-orange); }
+.severity-low { background: rgba(6,214,160,0.15); color: var(--accent-cyan); }
+
+/* ===== METRICS ===== */
+.metrics-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+.metric-card {
+  background: var(--bg-card); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 1.75rem; text-align: center; transition: all 0.3s;
+}
+.metric-card:hover { background: var(--bg-card-hover); transform: translateY(-3px); }
+.metric-value { font-size: 2.2rem; font-weight: 800; background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.metric-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ===== API TABLE ===== */
+.api-table-wrap { max-width: 1000px; margin: 0 auto; overflow-x: auto; }
+.api-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.api-table th { text-align: left; padding: 0.85rem 1rem; background: rgba(79,143,255,0.08); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-blue); }
+.api-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
+.api-table tr:hover td { background: var(--bg-card-hover); }
+.api-method { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+.method-post { background: rgba(79,143,255,0.12); color: var(--accent-blue); }
+.method-get { background: rgba(6,214,160,0.12); color: var(--accent-cyan); }
+.api-endpoint { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-primary); }
+
+/* ===== FOOTER ===== */
+.footer {
+  padding: 4rem 2rem 2rem; border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+.footer-content { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+.footer-brand p { color: var(--text-muted); font-size: 0.85rem; max-width: 300px; margin-top: 0.5rem; }
+.footer-links h4 { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-primary); margin-bottom: 0.75rem; }
+.footer-links a { display: block; color: var(--text-muted); font-size: 0.85rem; text-decoration: none; padding: 3px 0; transition: color 0.3s; }
+.footer-links a:hover { color: var(--accent-blue); }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.8rem; color: var(--text-muted); }
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); padding: 1rem 2rem; gap: 1rem; border-bottom: 1px solid var(--border-color); }
+  .nav-links.active { display: flex; }
+  .hamburger { display: flex; }
+  .hero-stats { gap: 1.5rem; }
+  .hero-stat h3 { font-size: 1.5rem; }
+  .signal-name { width: 120px; font-size: 0.8rem; }
+  .roadmap-line { left: 18px; }
+  .roadmap-dot { left: 13px; }
+  .roadmap-content { margin-left: 14px; }
+}
+  </style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🛡️</text></svg>">
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="url(#g1)" stroke-width="2.5"/><path d="M10 16l4 4 8-8" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#4f8fff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+      <span>VeritasAI</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#personas">Users</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#risks">Risks</a></li>
+    </ul>
+    <a href="#features" class="nav-cta">Explore Platform</a>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> AI-Powered News Verification</div>
+    <h1>Fight Misinformation with <span class="gradient">Explainable AI</span></h1>
+    <p>VeritasAI combines multi-signal credibility scoring, NLP classification, and real-time fact-checking to empower journalists, platforms, and readers — making truth more accessible than misinformation.</p>
+    <div class="hero-actions">
+      <a href="#features" class="btn-primary">View Platform Features</a>
+      <a href="#architecture" class="btn-secondary">Technical Architecture →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <h3><span data-count="92" data-suffix="%+">0</span></h3>
+        <p>F1 Accuracy</p>
+      </div>
+      <div class="hero-stat">
+        <h3><span data-count="10" data-suffix="+">0</span></h3>
+        <p>Languages</p>
+      </div>
+      <div class="hero-stat">
+        <h3><span data-count="5" data-suffix="M+">0</span></h3>
+        <p>Articles / Day</p>
+      </div>
+      <div class="hero-stat">
+        <h3>&lt;<span data-count="2" data-suffix="s">0</span></h3>
+        <p>Avg Latency</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROBLEM ===== -->
+<section id="problem">
+  <div class="section-header reveal">
+    <span class="section-label">The Challenge</span>
+    <h2>The Misinformation Crisis</h2>
+    <p>Digital media has made it trivially easy to publish and amplify false information at unprecedented scale.</p>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(239,68,68,0.1)">⚡</div>
+      <h3>Velocity</h3>
+      <p>Fake news spreads up to 6× faster than real news on social platforms. Speed of propagation outpaces human fact-checkers.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(79,143,255,0.1)">📊</div>
+      <h3>Volume</h3>
+      <p>Millions of articles published daily make manual fact-checking impossible at scale — coverage remains below 1%.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(139,92,246,0.1)">🤖</div>
+      <h3>Sophistication</h3>
+      <p>AI-generated text, deepfakes, and coordinated inauthentic behavior make detection increasingly complex.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(245,158,11,0.1)">🧠</div>
+      <h3>Confirmation Bias</h3>
+      <p>Engagement-optimized algorithms amplify emotionally charged content regardless of factual accuracy.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(6,214,160,0.1)">🌍</div>
+      <h3>Linguistic Diversity</h3>
+      <p>Fake news transcends languages, dialects, and cultural contexts — requiring multilingual AI solutions.</p>
+    </div>
+    <div class="problem-card reveal">
+      <div class="problem-icon" style="background:rgba(236,72,153,0.1)">🔍</div>
+      <h3>Current Tools Fail</h3>
+      <p>Keyword blacklists, source blocklists, and single-model classifiers suffer from high false positives and no explainability.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section id="features" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">Platform Capabilities</span>
+    <h2>Core Features</h2>
+    <p>A comprehensive detection engine combining NLP, multi-signal analysis, and explainable AI.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <span class="feature-number">01</span>
+      <span class="feature-tag tag-ai">AI / ML</span>
+      <h3>NLP Classification Pipeline</h3>
+      <p>Multi-label classification — Fake, Misleading, Satire, Real — via fine-tuned RoBERTa, XGBoost ensemble, and meta-learner with calibrated probability scores.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">02</span>
+      <span class="feature-tag tag-ai">AI / ML</span>
+      <h3>Credibility Scoring Engine</h3>
+      <p>Composite 0–100 score from 6 weighted signals: source reputation (25%), linguistic cues (20%), claim verification (30%), citation quality (10%), temporal consistency (8%), author credibility (7%).</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">03</span>
+      <span class="feature-tag tag-ai">Explainability</span>
+      <h3>XAI Module</h3>
+      <p>Every prediction includes human-readable explanations with LIME & SHAP values. Highlighted text spans show exactly which phrases influenced the classification.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">04</span>
+      <span class="feature-tag tag-api">API</span>
+      <h3>RESTful & WebSocket API</h3>
+      <p>Versioned REST API for article analysis, batch processing (500/request), source reputation lookup, and real-time WebSocket integration. P99 latency &lt; 3s.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">05</span>
+      <span class="feature-tag tag-ui">Dashboard</span>
+      <h3>Web Dashboard</h3>
+      <p>Visual credibility gauges, analysis history, source reputation explorer, team workspaces for collaborative fact-checking, and analytics on model confidence trends.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">06</span>
+      <span class="feature-tag tag-ui">Extension</span>
+      <h3>Browser Extension</h3>
+      <p>Auto-scans articles on major news domains. Color-coded credibility banner with expandable explanation panel and one-click reporting for unscanned articles.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">07</span>
+      <span class="feature-tag tag-ml">ML Ops</span>
+      <h3>Active Learning Pipeline</h3>
+      <p>Human feedback routed to review queues. Weekly fine-tuning cycles. Continuous drift detection with Evidently AI and automated performance monitoring.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-number">08</span>
+      <span class="feature-tag tag-ai">AI / ML</span>
+      <h3>Multilingual Support</h3>
+      <p>XLM-RoBERTa model handles 10+ languages at launch. Separate benchmarks per language ensure consistent quality across geographies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CREDIBILITY SIGNALS ===== -->
+<section id="signals">
+  <div class="section-header reveal">
+    <span class="section-label">Scoring Engine</span>
+    <h2>Credibility Signal Weights</h2>
+    <p>Six weighted dimensions compose the final credibility score (0–100).</p>
+  </div>
+  <div class="signals-container reveal">
+    <div class="signal-bar">
+      <span class="signal-name">Claim Verification</span>
+      <div class="signal-track"><div class="signal-fill" data-width="100%" style="background:linear-gradient(90deg,#4f8fff,#8b5cf6)"></div></div>
+      <span class="signal-weight">30%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Source Reputation</span>
+      <div class="signal-track"><div class="signal-fill" data-width="83%" style="background:linear-gradient(90deg,#8b5cf6,#ec4899)"></div></div>
+      <span class="signal-weight">25%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Linguistic Cues</span>
+      <div class="signal-track"><div class="signal-fill" data-width="67%" style="background:linear-gradient(90deg,#06d6a0,#4f8fff)"></div></div>
+      <span class="signal-weight">20%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Citation Quality</span>
+      <div class="signal-track"><div class="signal-fill" data-width="33%" style="background:linear-gradient(90deg,#f59e0b,#ef4444)"></div></div>
+      <span class="signal-weight">10%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Temporal Consistency</span>
+      <div class="signal-track"><div class="signal-fill" data-width="27%" style="background:linear-gradient(90deg,#ec4899,#8b5cf6)"></div></div>
+      <span class="signal-weight">8%</span>
+    </div>
+    <div class="signal-bar">
+      <span class="signal-name">Author Credibility</span>
+      <div class="signal-track"><div class="signal-fill" data-width="23%" style="background:linear-gradient(90deg,#4f8fff,#06d6a0)"></div></div>
+      <span class="signal-weight">7%</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== API ===== -->
+<section id="api" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">Developer Interface</span>
+    <h2>API Endpoints</h2>
+    <p>A versioned REST API for real-time and batch article analysis.</p>
+  </div>
+  <div class="api-table-wrap reveal">
+    <table class="api-table">
+      <thead>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Auth</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="api-method method-post">POST</span></td>
+          <td class="api-endpoint">/v1/analyze</td>
+          <td>Submit article text or URL for analysis</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-get">GET</span></td>
+          <td class="api-endpoint">/v1/result/{id}</td>
+          <td>Retrieve async analysis result</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-post">POST</span></td>
+          <td class="api-endpoint">/v1/feedback</td>
+          <td>Submit correction or feedback on prediction</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-get">GET</span></td>
+          <td class="api-endpoint">/v1/source/{domain}</td>
+          <td>Get reputation profile for a domain</td>
+          <td>API Key</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-post">POST</span></td>
+          <td class="api-endpoint">/v1/batch</td>
+          <td>Bulk submit up to 500 articles</td>
+          <td>API Key + Tier</td>
+        </tr>
+        <tr>
+          <td><span class="api-method method-get">GET</span></td>
+          <td class="api-endpoint">/v1/languages</td>
+          <td>List supported languages</td>
+          <td>Public</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== PERSONAS ===== -->
+<section id="personas">
+  <div class="section-header reveal">
+    <span class="section-label">Target Audience</span>
+    <h2>Who We Serve</h2>
+    <p>Designed for journalists, platform teams, researchers, and everyday readers.</p>
+  </div>
+  <div class="personas-grid">
+    <div class="persona-card reveal">
+      <div class="persona-avatar">📰</div>
+      <h3>Priya</h3>
+      <p class="persona-role">Investigative Journalist</p>
+      <p>Needs rapid credibility checks on sources before publication. Uses the platform 20+ times daily. Values accuracy and source attribution.</p>
+    </div>
+    <div class="persona-card reveal">
+      <div class="persona-avatar">🛡️</div>
+      <h3>Marcus</h3>
+      <p class="persona-role">Trust & Safety Lead</p>
+      <p>Integrates detection at platform scale to triage flagged content. Values API reliability, throughput, and comprehensive audit logs.</p>
+    </div>
+    <div class="persona-card reveal">
+      <div class="persona-avatar">📱</div>
+      <h3>Aisha</h3>
+      <p class="persona-role">Casual News Reader</p>
+      <p>Wants a browser extension that quietly flags dubious articles while browsing. Values simplicity and non-intrusive UX.</p>
+    </div>
+    <div class="persona-card reveal">
+      <div class="persona-avatar">🔬</div>
+      <h3>Dr. Raj</h3>
+      <p class="persona-role">Academic Researcher</p>
+      <p>Studies disinformation patterns. Needs bulk analysis tools, dataset export, and detailed model metadata for research.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ARCHITECTURE ===== -->
+<section id="architecture" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">System Design</span>
+    <h2>Technical Architecture</h2>
+    <p>A modular, horizontally scalable stack built for 5M+ articles per day.</p>
+  </div>
+  <div class="arch-grid">
+    <div class="arch-layer reveal">
+      <h4>Ingestion</h4>
+      <ul>
+        <li>URL Scraper</li>
+        <li>Text Extractor</li>
+        <li>Language Detector</li>
+        <li>Kafka Queue</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>NLP Preprocessing</h4>
+      <ul>
+        <li>spaCy / NLTK Pipeline</li>
+        <li>Named Entity Recognition</li>
+        <li>Coreference Resolution</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>ML Models</h4>
+      <ul>
+        <li>Fine-tuned RoBERTa</li>
+        <li>XGBoost Ensemble</li>
+        <li>Meta-Learner</li>
+        <li>XAI Module (LIME/SHAP)</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>Credibility Engine</h4>
+      <ul>
+        <li>Source Reputation DB (Neo4j)</li>
+        <li>Claim Extractor</li>
+        <li>Fact-Check API Clients</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>API Gateway</h4>
+      <ul>
+        <li>FastAPI + Nginx</li>
+        <li>Auth Service</li>
+        <li>Rate Limiter</li>
+        <li>WebSocket Handler</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>Data Storage</h4>
+      <ul>
+        <li>PostgreSQL (results)</li>
+        <li>Redis (cache)</li>
+        <li>S3 (model artifacts)</li>
+        <li>Elasticsearch (search)</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>MLOps</h4>
+      <ul>
+        <li>MLflow (tracking)</li>
+        <li>DVC (data versioning)</li>
+        <li>Airflow (pipelines)</li>
+        <li>Prometheus + Grafana</li>
+      </ul>
+    </div>
+    <div class="arch-layer reveal">
+      <h4>Frontend</h4>
+      <ul>
+        <li>React + TypeScript SPA</li>
+        <li>Browser Extension (MV3)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== METRICS ===== -->
+<section id="metrics">
+  <div class="section-header reveal">
+    <span class="section-label">Success Criteria</span>
+    <h2>Key Performance Targets</h2>
+    <p>Measurable objectives driving development across all phases.</p>
+  </div>
+  <div class="metrics-grid">
+    <div class="metric-card reveal">
+      <div class="metric-value">≥ 92%</div>
+      <div class="metric-label">F1 Score (All Languages)</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">100%</div>
+      <div class="metric-label">Predictions with Explanation</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">&lt; 2s</div>
+      <div class="metric-label">Avg API Response Time</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">99.9%</div>
+      <div class="metric-label">System Uptime SLA</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">5M+</div>
+      <div class="metric-label">Articles / Day Capacity</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">&lt; 5%</div>
+      <div class="metric-label">Bias Disparity Threshold</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">500K+</div>
+      <div class="metric-label">Labeled Training Articles</div>
+    </div>
+    <div class="metric-card reveal">
+      <div class="metric-value">50K+</div>
+      <div class="metric-label">Domains in Reputation DB</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROADMAP ===== -->
+<section id="roadmap" style="background:var(--bg-secondary)">
+  <div class="section-header reveal">
+    <span class="section-label">Delivery Plan</span>
+    <h2>Product Roadmap</h2>
+    <p>Six phases from dataset curation to GA launch and beyond.</p>
+  </div>
+  <div class="roadmap-container reveal">
+    <div class="roadmap-line"></div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 0 — Months 1–2</span>
+        <h4>Foundation</h4>
+        <p>Dataset curation, baseline model training, architecture design, API spec finalization.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 1 — Months 3–5</span>
+        <h4>Core Engine (Alpha)</h4>
+        <p>NLP pipeline, RoBERTa fine-tuning, credibility engine v1, REST API alpha. Gate: F1 ≥ 85%, P99 &lt; 3s.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 2 — Months 6–8</span>
+        <h4>Platform Build (Beta)</h4>
+        <p>Web dashboard, browser extension, multilingual support (5 languages), closed beta launch.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 3 — Months 9–10</span>
+        <h4>Hardening</h4>
+        <p>XAI module, active learning pipeline, bias audit, security pen-test, open beta. Gate: F1 ≥ 90%, NPS ≥ 45.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 4 — Month 11</span>
+        <h4>General Availability</h4>
+        <p>10 languages, full API, dashboard, extension, SLA guarantees. Gate: F1 ≥ 92%, uptime ≥ 99.9%.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-dot"></div>
+      <div class="roadmap-content">
+        <span class="roadmap-phase">Phase 5 (v2.0) — Month 12+</span>
+        <h4>Next Generation</h4>
+        <p>Image/video deepfake detection, social graph analysis, native mobile apps (iOS & Android).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RISKS ===== -->
+<section id="risks">
+  <div class="section-header reveal">
+    <span class="section-label">Risk Management</span>
+    <h2>Risks & Mitigations</h2>
+    <p>Proactively identified risks with concrete mitigation strategies.</p>
+  </div>
+  <div class="risks-table-wrap reveal">
+    <table class="risks-table">
+      <thead>
+        <tr><th>Risk</th><th>Severity</th><th>Mitigation Strategy</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Adversarial attacks on classifier</td>
+          <td><span class="severity severity-high">High</span></td>
+          <td>Adversarial training, input sanitization, rate-limiting anomalous queries</td>
+        </tr>
+        <tr>
+          <td>Political bias in model outputs</td>
+          <td><span class="severity severity-high">High</span></td>
+          <td>Quarterly bias audits, diverse annotation team, blind political-label testing</td>
+        </tr>
+        <tr>
+          <td>Legal liability for misclassification</td>
+          <td><span class="severity severity-high">High</span></td>
+          <td>Label outputs as AI-assisted with disclaimers; not deterministic</td>
+        </tr>
+        <tr>
+          <td>Data quality / label noise</td>
+          <td><span class="severity severity-medium">Medium</span></td>
+          <td>Multi-annotator agreement (Fleiss κ &gt; 0.7), active learning curation</td>
+        </tr>
+        <tr>
+          <td>Third-party API dependency failure</td>
+          <td><span class="severity severity-medium">Medium</span></td>
+          <td>Fallback scoring when external APIs unavailable; aggressive caching</td>
+        </tr>
+        <tr>
+          <td>Model drift over time</td>
+          <td><span class="severity severity-medium">Medium</span></td>
+          <td>Automated drift detection via Evidently AI; monthly re-evaluation triggers</td>
+        </tr>
+        <tr>
+          <td>Regulatory restrictions</td>
+          <td><span class="severity severity-low">Low</span></td>
+          <td>Legal review per jurisdiction; data residency options for EU customers</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" width="28" height="28"><circle cx="16" cy="16" r="14" stroke="url(#g2)" stroke-width="2.5"/><path d="M10 16l4 4 8-8" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#4f8fff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+        <span>VeritasAI</span>
+      </a>
+      <p>AI-powered fake news detection platform. Making truth more accessible than misinformation.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#api">API Reference</a>
+      <a href="#signals">Credibility Engine</a>
+      <a href="#architecture">Architecture</a>
+    </div>
+    <div class="footer-links">
+      <h4>Company</h4>
+      <a href="#personas">Target Users</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#risks">Risk Management</a>
+      <a href="#metrics">Success Metrics</a>
+    </div>
+    <div class="footer-links">
+      <h4>Compliance</h4>
+      <a href="#">GDPR Compliant</a>
+      <a href="#">CCPA Compliant</a>
+      <a href="#">SOC 2 Type II</a>
+      <a href="#">Security Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 VeritasAI — Product Requirements Document v1.0 | This is a living document.</p>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+const navbar = document.querySelector('.navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Hamburger menu
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+  hamburger.classList.toggle('active');
+});
+
+// Close menu on link click
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => navLinks.classList.remove('active'));
+});
+
+// Scroll reveal
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealElements.forEach(el => revealObserver.observe(el));
+
+// Animate signal bars on scroll
+const signalBars = document.querySelectorAll('.signal-fill');
+const signalObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const target = entry.target.getAttribute('data-width');
+      entry.target.style.width = target;
+    }
+  });
+}, { threshold: 0.3 });
+signalBars.forEach(bar => {
+  bar.style.width = '0%';
+  signalObserver.observe(bar);
+});
+
+// Counter animation for hero stats
+function animateCounter(el, target, suffix = '') {
+  let current = 0;
+  const increment = target / 60;
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = (Number.isInteger(target) ? Math.floor(current) : current.toFixed(1)) + suffix;
+  }, 25);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.animated) {
+      entry.target.dataset.animated = 'true';
+      const counters = entry.target.querySelectorAll('[data-count]');
+      counters.forEach(c => {
+        animateCounter(c, parseFloat(c.dataset.count), c.dataset.suffix || '');
+      });
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.hero-stats, .metrics-grid').forEach(el => statsObserver.observe(el));
+
+// Smooth anchor scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(anchor.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
